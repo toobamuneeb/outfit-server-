@@ -1,0 +1,27 @@
+{
+  "name": "hi-frankie-server",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.109.0",
+    "next": "15.5.28",
+    "nodemailer": "10.1.7",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "20.19.11",
+    "@types/nodemailer": "8.0.2",
+    "@types/react": "19.2.2",
+    "typescript": "5.9.3"
+  }
+}
