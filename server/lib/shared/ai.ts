@@ -7,6 +7,9 @@ const API_REVISION = '2026-05-20';
 
 const textModel = () => process.env.AI_TEXT_MODEL ?? 'gemini-4-argon';
 const imageModel = () => process.env.AI_IMAGE_MODEL ?? 'gemini-3.1-flash-lite-image';
+// Less "thinking" makes text answers come back much faster (looks, scans, analyses).
+// AI_THINKING_LEVEL=off sends the model's own default instead.
+const thinkingLevel = () => process.env.AI_THINKING_LEVEL ?? 'low';
 
 const MAX_INLINE_BYTES = 15 * 1024 * 1024;
 
@@ -28,6 +31,18 @@ async function callGemini(body: Record<string, unknown>) {
     throw new Error(`AI request failed (${response.status}): ${data?.error?.message ?? 'unknown error'}`);
   }
   return data;
+}
+
+// Sends the request with the given thinking level; if this model doesn't accept that level,
+// sends it again without one so a model change never breaks the app.
+async function callWithThinking(level: string | null, body: Record<string, unknown>) {
+  if (!level) return callGemini(body);
+  try {
+    return await callGemini({ ...body, generation_config: { thinking_level: level } });
+  } catch (error) {
+    if (/thinking/i.test((error as Error).message)) return callGemini(body);
+    throw error;
+  }
 }
 
 // Every output block, wherever this API revision places it.
@@ -84,7 +99,8 @@ export async function invokeLLM({
 }: InvokeLLMOptions): Promise<any> {
   const images = await Promise.all((file_urls ?? []).map(imagePart));
 
-  const data = await callGemini({
+  const level = thinkingLevel();
+  const data = await callWithThinking(level === 'off' ? null : level, {
     model: textModel(),
     input: images.length ? [{ type: 'text', text: prompt }, ...images] : prompt,
     ...(add_context_from_internet ? { tools: [{ type: 'google_search' }] } : {}),

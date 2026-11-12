@@ -306,7 +306,7 @@ Return JSON with: day_note (string), outfits (array with exactly 3 outfits), fra
 
         await base44.asServiceRole.integrations.Core.SendEmail({
           to: u.email,
-          from_name: 'Hi Frankie',
+          from_name: 'HI FRANKIE',
           subject: `Your Morning Edit \u2014 3 looks for ${todayName}`,
           body: emailBody,
         });

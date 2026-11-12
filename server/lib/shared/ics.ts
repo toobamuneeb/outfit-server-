@@ -143,7 +143,7 @@ function incrementTime(time: string, minutesToAdd: number): string {
 }
 
 export function generateICS(outfits: any[]): string {
-  let ics = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//In.Robe//Outfit Calendar//EN\r\nCALSCALE:GREGORIAN\r\n';
+  let ics = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//HI FRANKIE//Outfit Calendar//EN\r\nCALSCALE:GREGORIAN\r\n';
   for (const o of outfits) {
     const dateStr = (o.date || '').replace(/-/g, '');
     const time = o.reminder_time || '08:00';
@@ -153,7 +153,7 @@ export function generateICS(outfits: any[]): string {
     ics += `UID:${o.id}@inrobe.app\r\n`;
     ics += `DTSTART:${dateStr}T${timeStr}00\r\n`;
     ics += `DTEND:${dateStr}T${endTimeStr}00\r\n`;
-    ics += `SUMMARY:In.Robe — ${escapeICS(o.outfit_title || 'Outfit')}\r\n`;
+    ics += `SUMMARY:HI FRANKIE — ${escapeICS(o.outfit_title || 'Outfit')}\r\n`;
     ics += `DESCRIPTION:${escapeICS(o.outfit_description || '')}\r\n`;
     ics += 'BEGIN:VALARM\r\nTRIGGER:-PT0M\r\nACTION:DISPLAY\r\n';
     ics += `DESCRIPTION:${escapeICS('What to wear: ' + (o.outfit_title || 'Outfit'))}\r\n`;
